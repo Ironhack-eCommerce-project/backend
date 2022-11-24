@@ -12,13 +12,7 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-app.get("/api/products", (req, res) => {
-  res.json(products);
-});
-
-app.get("/api/products/:id", (req, res) => {
-  const product = products.find((p) => p.id === req.params.id);
-  res.json(product);
-});
+import seedRouter from "./routes/seed.routes.js";
+app.use("/api/seed", seedRouter);
 
 export default app;
