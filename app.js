@@ -20,4 +20,7 @@ app.use("/api/seed", seedRouter);
 import productRouter from "./routes/product.routes.js";
 app.use("/api/products", productRouter);
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 export default app;
