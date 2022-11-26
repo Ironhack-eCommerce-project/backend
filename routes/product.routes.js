@@ -8,8 +8,9 @@ router.get("/", async (req, res) => {
   res.json(products);
 });
 
-router.get("/slug/:slug", async (req, res) => {
+router.get("/:slug", async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slug });
+
   if (product) {
     res.send(product);
   } else {
