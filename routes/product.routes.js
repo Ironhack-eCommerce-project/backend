@@ -27,4 +27,14 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  try {
+    console.log("This route is correct");
+    console.log("REQ.BODY: ", req.body);
+    res.send("Data sent");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export default router;
