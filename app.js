@@ -6,6 +6,7 @@ import morgan from "morgan";
 import cors from "cors";
 import seedRouter from "./routes/seed.routes.js";
 import productRouter from "./routes/product.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 dotenv.config();
 connectDatabase();
@@ -26,11 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/seed", seedRouter);
-
-app.use("/api/products", productRouter);
-
 app.use("/products", productRouter);
-
 app.use("/users", userRouter);
 
 app.use(notFound);
