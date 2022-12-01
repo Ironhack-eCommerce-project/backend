@@ -1,8 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
-import connectDatabase from "./db/mongoDb.js";
-import { errorHandler, notFound } from "./middleware/errors.js";
 import morgan from "morgan";
+import connectDatabase from "./db/mongoDb.js";
+import productRouter from "./routes/product.routes.js";
+import userRouter from "./routes/user.routes.js";
+import seedRouter from "./routes/seed.routes.js";
+import { errorHandler, notFound } from "./middleware/errors.js";
 
 dotenv.config();
 connectDatabase();
@@ -18,13 +21,10 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-import seedRouter from "./routes/seed.routes.js";
 app.use("/api/seed", seedRouter);
 
-import productRouter from "./routes/product.routes.js";
 app.use("/products", productRouter);
 
-import userRouter from "./routes/user.routes.js";
 app.use("/users", userRouter);
 
 app.use(notFound);
