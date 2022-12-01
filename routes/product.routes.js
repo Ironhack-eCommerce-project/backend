@@ -46,4 +46,14 @@ router.post("/", async (req, res) => {
   }
 });
 
+/* router.post('/', (req, res, next) => {
+  console.log("REQ BODY: ", req.body);
+  const { name, description, price, image, category, slug } = req.body;
+  res.send("123")
+   Product.create({ name, description, price, image, category, slug })
+    .then(response => res.json(response))
+    .catch(err => res.json(err));
+}); */
+
+
 export default router;
