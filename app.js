@@ -1,12 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDatabase from "./db/mongoDb.js";
+import { errorHandler, notFound } from "./middleware/errors.js";
 import morgan from "morgan";
 
 dotenv.config();
 connectDatabase();
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use(morgan("tiny"));
 
@@ -18,9 +22,12 @@ import seedRouter from "./routes/seed.routes.js";
 app.use("/api/seed", seedRouter);
 
 import productRouter from "./routes/product.routes.js";
-app.use("/api/products", productRouter);
+app.use("/products", productRouter);
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+import userRouter from "./routes/user.routes.js";
+app.use("/users", userRouter);
+
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
