@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDatabase from "./db/mongoDb.js";
+import { errorHandler, notFound } from "./middleware/errors.js";
 import morgan from "morgan";
 import cors from "cors";
 import seedRouter from "./routes/seed.routes.js";
@@ -11,6 +12,9 @@ connectDatabase();
 
 const app = express();
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use(morgan("tiny"));
 app.use(cors({ origin: CLIENT_ORIGIN, credentials: true }));
@@ -24,5 +28,12 @@ app.get("/", (req, res) => {
 app.use("/api/seed", seedRouter);
 
 app.use("/api/products", productRouter);
+
+app.use("/products", productRouter);
+
+app.use("/users", userRouter);
+
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
