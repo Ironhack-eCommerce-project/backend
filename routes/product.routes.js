@@ -4,6 +4,7 @@ import asyncHandler from "express-async-handler";
 
 const router = Router();
 
+// LIST PRODUCTS
 router.get(
   "/",
   asyncHandler(async (req, res) => {
@@ -12,30 +13,17 @@ router.get(
   })
 );
 
-// router.get(
-//   "/:id",
-//   asyncHandler(async (req, res) => {
-//     console.log("PRODUCT ID:", req.params.id);
-//     const product = await Product.findById(req.params.id);
-//     if (product) {
-//       res.json(product);
-//     } else {
-//       res.status(404).send({ message: "Product Not Found" });
-//     }
-//   })
-// );
-
-// // *** GETTING AN ERROR ON THIS ROUTE
-
+// GET PRODUCT BY SLUG
 router.get("/:slug", async (req, res) => {
   const product = await Product.findOne({ slug: req.params.slug });
   if (product) {
-    res.send(product);
+    res.json(product);
   } else {
-    res.status(404).send({ message: "Product Not Found" });
+    res.status(404).json({ message: "Product Not Found" });
   }
 });
 
+// ADD NEW PRODUCT
 router.post("/", async (req, res) => {
   try {
     console.log("This route is correct");
