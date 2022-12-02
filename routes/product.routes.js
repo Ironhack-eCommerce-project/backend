@@ -4,6 +4,7 @@ import asyncHandler from "express-async-handler";
 
 const router = Router();
 
+// LIST PRODUCTS
 router.get(
   "/",
   asyncHandler(async (req, res) => {
@@ -12,6 +13,7 @@ router.get(
   })
 );
 
+// GET PRODUCT BY SLUG
 router.get(
   "/:slug",
   asyncHandler(async (req, res) => {
@@ -25,6 +27,7 @@ router.get(
   })
 );
 
+// ADD NEW PRODUCT
 router.post(
   "/",
   asyncHandler(async (req, res) => {
@@ -38,7 +41,6 @@ router.post(
         price: req.body.price,
       });
       res.send("Data sent");
-    
   })
 );
 
