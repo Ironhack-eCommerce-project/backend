@@ -17,7 +17,6 @@ router.get(
 router.get(
   "/:slug",
   asyncHandler(async (req, res) => {
-    console.log("PRODUCT ID:", req.params.slug);
     const product = await Product.findOne({ slug: req.params.slug });
     if (product) {
       res.json(product);
@@ -43,5 +42,16 @@ router.post(
       res.send("Data sent");
   })
 );
+
+// DELETE PRODUCT
+router.delete(
+  "/:slug",
+  asyncHandler(async (req, res, next) =>  {
+    console.log("REQPARAMS: ", req.params);
+    const productToDelete = await Product.findOneAndDelete({ slug: req.params.slug });
+    console.log("PTD", productToDelete);
+    res.send("Product deleted");
+  })
+)
 
 export default router;
