@@ -6,14 +6,22 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+passport.serializeUser(function (user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  done(null, user);
+});
+
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.CLIENT_ID,
-      // clientID:
-      //   "785584103709-fb79lranm13k07h2jr4059vtm818r4t6.apps.googleusercontent.com",
+      // clientID: process.env.CLIENT_ID,
+      clientID:
+        "785584103709-fb79lranm13k07h2jr4059vtm818r4t6.apps.googleusercontent.com",
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: `${process.env.CLIENT_ORIGIN}/google/callback`,
+      callbackURL: `http://localhost:5000/users/google/callback`,
       scope: ["profile", "email"],
     },
     function (accessToken, refreshToken, profile, done) {
@@ -22,11 +30,3 @@ passport.use(
     }
   )
 );
-
-passport.serializeUser(function (user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function (user, done) {
-  done(null, user);
-});
