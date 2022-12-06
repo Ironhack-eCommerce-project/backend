@@ -10,9 +10,12 @@ import productRouter from "./routes/product.routes.js";
 import userRouter from "./routes/user.routes.js";
 import seedRouter from "./routes/seed.routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
+import cors from "cors";
+
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
 const app = express();
+
 
 dotenv.config();
 connectDatabase();
