@@ -1,5 +1,5 @@
 import { response, Router } from "express";
-import Product from "../models/Product.model.js";
+import Category from "../models/Category.model.js";
 import asyncHandler from "express-async-handler";
 
 const router = Router();
@@ -8,13 +8,13 @@ const router = Router();
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const products = await Product.find();
-    res.json(products);
+    const categories = await Category.find();
+    res.json(categories);
   })
 );
 
 // GET PRODUCT BY SLUG
-router.get(
+/* router.get(
   "/:slug",
   asyncHandler(async (req, res) => {
     const product = await Product.findOne({ slug: req.params.slug });
@@ -24,27 +24,24 @@ router.get(
       res.status(404).send({ message: "Product Not Found" });
     }
   })
-);
+); */
 
 // ADD NEW PRODUCT
 router.post(
   "/",
   asyncHandler(async (req, res) => {
     console.log("REQ.BODY: ", req.body);
-    const newProduct = await Product.create({
+    const newCategory = await Category.create({
       name: req.body.name,
       slug: req.body.slug,
-      image: req.body.image,
-      category: req.body.category,
-      description: req.body.description,
-      price: req.body.price,
+      products: req.body.products,
     });
     res.send("Data sent");
   })
 );
 
 // DELETE PRODUCT
-router.delete(
+/* router.delete(
   "/:slug",
   asyncHandler(async (req, res, next) => {
     const productToDelete = await Product.findOneAndDelete({
@@ -52,10 +49,10 @@ router.delete(
     });
     res.send("Product deleted");
   })
-);
+); */
 
 //EDIT PRODUCT
-router.put(
+/* router.put(
   "/:slug",
   asyncHandler(async (req, res, next) => {
     console.log("REQPARA", req.params);
@@ -72,6 +69,6 @@ router.put(
     );
     res.send("Edited successfully")
   })
-);
+); */
 
 export default router;
