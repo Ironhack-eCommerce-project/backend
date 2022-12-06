@@ -6,11 +6,7 @@ import productRouter from "./routes/product.routes.js";
 import userRouter from "./routes/user.routes.js";
 import seedRouter from "./routes/seed.routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
-import morgan from "morgan";
 import cors from "cors";
-import seedRouter from "./routes/seed.routes.js";
-import productRouter from "./routes/product.routes.js";
-import userRouter from "./routes/user.routes.js";
 
 dotenv.config();
 connectDatabase();
@@ -22,7 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 
-app.use(morgan("tiny"));
 app.use(cors({ origin: CLIENT_ORIGIN, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
