@@ -2,9 +2,12 @@ import { Router } from "express";
 import User from "../models/Users.model.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
+import passport from "passport";
+import dotenv from "dotenv";
+import { isLoggedIn } from "../middleware/auth.js";
 
+dotenv.config();
 const saltRounds = 10;
-
 const router = Router();
 
 /// USER LOGIN
@@ -84,5 +87,50 @@ router.post(
     }
   })
 );
+
+// GOOGLE PASSPORT OAUTH2
+router.get("/login/success", (req, res) => {
+  // console.log(req.user);
+  if (req.user) {
+    res.status(200).json({
+      message: "Successufully Logged In",
+      user: req.user,
+    });
+  } else {
+    res.status(403).json({ message: "Not authorized" });
+  }
+});
+
+router.get("/good", (req, res) => {
+  res.send(`Welcome ${req.user.displayName}`);
+  console.log(req.user);
+});
+
+router.get("/login/failed", (req, res) => {
+  res.status(401).json({ message: "Login failed" });
+});
+
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    successRedirect: `http://localHost:3000/profile`,
+    failureRedirect: "/users/login/failed",
+    // function(req, res) {
+    //   res.redirect("users/good");
+    // },
+    // successRedirect: "/login/success",
+  })
+);
+
+//USER LOGOUT
+router.get("/logout", (req, res) => {
+  req.session = null;
+  res.redirect(process.env.CLIENT_ORIGIN);
+});
 
 export default router;
