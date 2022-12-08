@@ -1,7 +1,7 @@
 import { Router } from "express";
-import User from "../models/Users.model.js";
+import User from "../models/User.model.js";
 import users from "../data/users.js";
-import Product from "../models/Products.model.js";
+import Product from "../models/Product.model.js";
 import products from "../data/products.js";
 import asyncHandler from "express-async-handler";
 
