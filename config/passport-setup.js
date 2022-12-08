@@ -3,6 +3,7 @@ import passport from "passport";
 // const GoogleStrategy = require("passport-google-oauth20").Strategy;
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import dotenv from "dotenv";
+import User from "../models/Users.model.js";
 
 dotenv.config();
 
@@ -17,16 +18,27 @@ passport.deserializeUser(function (user, done) {
 passport.use(
   new GoogleStrategy(
     {
-      // clientID: process.env.CLIENT_ID,
-      clientID:
-        "785584103709-fb79lranm13k07h2jr4059vtm818r4t6.apps.googleusercontent.com",
+      clientID: process.env.CLIENT_ID,
+      // clientID:
+      //   "785584103709-fb79lranm13k07h2jr4059vtm818r4t6.apps.googleusercontent.com",
       clientSecret: process.env.CLIENT_SECRET,
       callbackURL: `http://localhost:5000/users/google/callback`,
       scope: ["profile", "email"],
     },
     function (accessToken, refreshToken, profile, done) {
-      //Use profile info to check if  the user is registed in db
-      return done(null, profile);
+      // return done(null, profile);
+      // console.log(profile);
+
+      //Creates new user on DB but still have to check if user exists in DB
+      new User({
+        name: profile._json.name,
+        email: profile._json.email,
+        password: accessToken,
+      })
+        .save()
+        .then((newUser) => {
+          console.log("new user: ", newUser);
+        });
     }
   )
 );

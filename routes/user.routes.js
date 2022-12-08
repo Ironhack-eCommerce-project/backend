@@ -13,6 +13,7 @@ const router = Router();
 /// USER LOGIN
 router.post(
   "/login",
+  isLoggedIn,
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     // console.log(req.body);
@@ -43,6 +44,7 @@ router.post(
 // USER SIGNUP
 router.post(
   "/signup",
+  isLoggedIn,
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
@@ -120,10 +122,6 @@ router.get(
   passport.authenticate("google", {
     successRedirect: `http://localHost:3000/profile`,
     failureRedirect: "/users/login/failed",
-    // function(req, res) {
-    //   res.redirect("users/good");
-    // },
-    // successRedirect: "/login/success",
   })
 );
 
