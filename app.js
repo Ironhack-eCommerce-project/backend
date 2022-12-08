@@ -9,6 +9,7 @@ import "./config/passport-setup.js";
 import productRouter from "./routes/product.routes.js";
 import userRouter from "./routes/user.routes.js";
 import seedRouter from "./routes/seed.routes.js";
+import categoryRouter from "./routes/category.routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
@@ -45,6 +46,7 @@ app.get("/", (req, res) => {
 app.use("/api/seed", seedRouter);
 app.use("/products", productRouter);
 app.use("/users", userRouter);
+app.use("/categories", categoryRouter);
 
 app.use(notFound);
 app.use(errorHandler);

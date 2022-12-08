@@ -1,7 +1,6 @@
 import { response, Router } from "express";
-import Product from "../models/Product.model.js";
-import asyncHandler from "express-async-handler";
 import Category from "../models/Category.model.js";
+import asyncHandler from "express-async-handler";
 
 const router = Router();
 
@@ -9,13 +8,13 @@ const router = Router();
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const products = await Product.find();
-    res.json(products);
+    const categories = await Category.find();
+    res.json(categories);
   })
 );
 
 // GET PRODUCT BY SLUG
-router.get(
+/* router.get(
   "/:slug",
   asyncHandler(async (req, res) => {
     const product = await Product.findOne({ slug: req.params.slug });
@@ -25,35 +24,24 @@ router.get(
       res.status(404).send({ message: "Product Not Found" });
     }
   })
-);
+); */
 
 // ADD NEW PRODUCT
 router.post(
   "/",
   asyncHandler(async (req, res) => {
     console.log("REQ.BODY: ", req.body);
-    const newProduct = await Product.create({
+    const newCategory = await Category.create({
       name: req.body.name,
       slug: req.body.slug,
-      image: req.body.image,
-      category: req.body.category,
-      description: req.body.description,
-      price: req.body.price,
+      products: req.body.products,
     });
-
-    const foundCategory = await Category.findOneAndUpdate(
-      { name: req.body.category },
-      {
-        $push: { products: newProduct._id },
-      },
-      { new: true }
-    );
     res.send("Data sent");
   })
 );
 
 // DELETE PRODUCT
-router.delete(
+/* router.delete(
   "/:slug",
   asyncHandler(async (req, res, next) => {
     const productToDelete = await Product.findOneAndDelete({
@@ -61,25 +49,13 @@ router.delete(
     });
     res.send("Product deleted");
   })
-);
+); */
 
 //EDIT PRODUCT
-router.put(
+/* router.put(
   "/:slug",
   asyncHandler(async (req, res, next) => {
     console.log("REQPARA", req.params);
-    console.log("INITIAL REQBODY", req.body)
-
-    //REMOVE PRODUCT FROM EARLIER CATEGORY
-    const removeFromCategory = await Category.findOneAndUpdate(
-      { products: req.body._id },
-      {
-        $pull: { products: req.body._id },
-      },
-      { new: true }
-    );
-
-    // SAVE PRODUCT    
     const productToEdit = await Product.findOneAndUpdate(
       { slug: req.params.slug },
       {
@@ -90,21 +66,9 @@ router.put(
         description: req.body.description,
         price: req.body.price,
       }
-    );    
-
-    //SAVE TO NEW CATEGORY
-    console.log("REQPASL", req.params.slug)
-    console.log("PRODUCTTOEDIT", productToEdit);
-    const saveToCategory = await Category.findOneAndUpdate(      
-      { name: req.body.category },
-      {
-        $push: { products: productToEdit._id },
-      },
-      { new: true }
     );
-
-    res.send("Edited successfully");
+    res.send("Edited successfully")
   })
-);
+); */
 
 export default router;
