@@ -92,7 +92,6 @@ router.post(
 
 // GOOGLE PASSPORT OAUTH2
 router.get("/login/success", (req, res) => {
-  // console.log(req.user);
   if (req.user) {
     res.status(200).json({
       message: "Successufully Logged In",
@@ -103,10 +102,10 @@ router.get("/login/success", (req, res) => {
   }
 });
 
-router.get("/good", (req, res) => {
-  res.send(`Welcome ${req.user.displayName}`);
-  console.log(req.user);
-});
+// router.get("/good", (req, res) => {
+//   res.send(`Welcome ${req.user.displayName}`);
+//   console.log(req.user);
+// });
 
 router.get("/login/failed", (req, res) => {
   res.status(401).json({ message: "Login failed" });
