@@ -40,13 +40,14 @@ router.post(
       description: req.body.description,
       price: req.body.price,
     });
+
     const foundCategory = await Category.findOneAndUpdate(
       { name: req.body.category },
       {
         $push: { products: newProduct._id },
       },
       { new: true }
-      );
+    );
     res.send("Data sent");
   })
 );
@@ -67,6 +68,18 @@ router.put(
   "/:slug",
   asyncHandler(async (req, res, next) => {
     console.log("REQPARA", req.params);
+    console.log("INITIAL REQBODY", req.body)
+
+    //REMOVE PRODUCT FROM EARLIER CATEGORY
+    const removeFromCategory = await Category.findOneAndUpdate(
+      { products: req.body._id },
+      {
+        $pull: { products: req.body._id },
+      },
+      { new: true }
+    );
+
+    // SAVE PRODUCT    
     const productToEdit = await Product.findOneAndUpdate(
       { slug: req.params.slug },
       {
@@ -77,8 +90,20 @@ router.put(
         description: req.body.description,
         price: req.body.price,
       }
+    );    
+
+    //SAVE TO NEW CATEGORY
+    console.log("REQPASL", req.params.slug)
+    console.log("PRODUCTTOEDIT", productToEdit);
+    const saveToCategory = await Category.findOneAndUpdate(      
+      { name: req.body.category },
+      {
+        $push: { products: productToEdit._id },
+      },
+      { new: true }
     );
-    res.send("Edited successfully")
+
+    res.send("Edited successfully");
   })
 );
 
