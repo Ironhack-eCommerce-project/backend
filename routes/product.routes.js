@@ -1,6 +1,7 @@
 import { response, Router } from "express";
 import Product from "../models/Product.model.js";
 import asyncHandler from "express-async-handler";
+import Category from "../models/Category.model.js";
 
 const router = Router();
 
@@ -39,6 +40,13 @@ router.post(
       description: req.body.description,
       price: req.body.price,
     });
+    const foundCategory = await Category.findOneAndUpdate(
+      { name: req.body.category },
+      {
+        $push: { products: newProduct._id },
+      },
+      { new: true }
+      );
     res.send("Data sent");
   })
 );
