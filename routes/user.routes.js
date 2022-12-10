@@ -34,7 +34,8 @@ router.post(
     const matchPassword = await bcrypt.compare(password, user.password);
     if (user && matchPassword) {
       const { _id, name, email, isAdmin, createdAt } = user;
-      res.json({ user });
+      console.log(user);
+      res.json(user).redirect(process.env.CLIENT_ORIGIN);
       return;
     }
     res.status(401).json({ message: "Invalid email or password" });
@@ -101,11 +102,6 @@ router.get("/login/success", (req, res) => {
     res.status(403).json({ message: "Not authorized" });
   }
 });
-
-// router.get("/good", (req, res) => {
-//   res.send(`Welcome ${req.user.displayName}`);
-//   console.log(req.user);
-// });
 
 router.get("/login/failed", (req, res) => {
   res.status(401).json({ message: "Login failed" });

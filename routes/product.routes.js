@@ -2,6 +2,7 @@ import { response, Router } from "express";
 import Product from "../models/Product.model.js";
 import asyncHandler from "express-async-handler";
 import Category from "../models/Category.model.js";
+import { isLoggedIn, isAdmin } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -30,6 +31,8 @@ router.get(
 // ADD NEW PRODUCT
 router.post(
   "/",
+  isLoggedIn,
+  isAdmin,
   asyncHandler(async (req, res) => {
     console.log("REQ.BODY: ", req.body);
     const newProduct = await Product.create({
@@ -55,6 +58,8 @@ router.post(
 // DELETE PRODUCT
 router.delete(
   "/:slug",
+  isLoggedIn,
+  isAdmin,
   asyncHandler(async (req, res, next) => {
     const productToDelete = await Product.findOneAndDelete({
       slug: req.params.slug,
@@ -66,9 +71,11 @@ router.delete(
 //EDIT PRODUCT
 router.put(
   "/:slug",
+  isLoggedIn,
+  isAdmin,
   asyncHandler(async (req, res, next) => {
     console.log("REQPARA", req.params);
-    console.log("INITIAL REQBODY", req.body)
+    console.log("INITIAL REQBODY", req.body);
 
     //REMOVE PRODUCT FROM EARLIER CATEGORY
     const removeFromCategory = await Category.findOneAndUpdate(
@@ -79,7 +86,7 @@ router.put(
       { new: true }
     );
 
-    // SAVE PRODUCT    
+    // SAVE PRODUCT
     const productToEdit = await Product.findOneAndUpdate(
       { slug: req.params.slug },
       {
@@ -90,12 +97,12 @@ router.put(
         description: req.body.description,
         price: req.body.price,
       }
-    );    
+    );
 
     //SAVE TO NEW CATEGORY
-    console.log("REQPASL", req.params.slug)
+    console.log("REQPASL", req.params.slug);
     console.log("PRODUCTTOEDIT", productToEdit);
-    const saveToCategory = await Category.findOneAndUpdate(      
+    const saveToCategory = await Category.findOneAndUpdate(
       { name: req.body.category },
       {
         $push: { products: productToEdit._id },
