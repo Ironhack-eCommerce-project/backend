@@ -9,7 +9,7 @@ const router = Router();
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const products = await Product.find();
+    const products = await Product.find().populate("category", "name")
     res.json(products);
   })
 );
@@ -111,14 +111,15 @@ router.put(
     );
 
     //SAVE TO NEW CATEGORY
+    console.log(productToEdit)
     const saveToCategory = await Category.findOneAndUpdate(
-      { name: req.body.category },
+      { _id: req.body.category },
       {
         $push: { products: productToEdit._id },
       },
       { new: true }
     );
-
+    console.log(saveToCategory)
     res.send("Edited successfully");
   })
 );
