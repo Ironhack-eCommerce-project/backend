@@ -83,7 +83,7 @@ router.post(
 
     if (createdUser) {
       const { _id, name, email, isAdmin } = createdUser;
-      const user = { _id, email };
+      const user = { _id, email, isAdmin };
       res.status(200).json({ user: user });
     } else {
       res.status(400).json("Invalid User Data");
@@ -93,11 +93,14 @@ router.post(
 
 // GOOGLE PASSPORT OAUTH2
 router.get("/login/success", (req, res) => {
+  // console.log(req.user);
   if (req.user) {
-    res.status(200).json({
-      message: "Successufully Logged In",
-      user: req.user,
-    });
+    // res.json({ user: req.user });
+    res.redirect("/profile");
+    // .status(200);
+    // .json({
+    // message: "Successufully Logged In",
+    // });
   } else {
     res.status(403).json({ message: "Not authorized" });
   }
@@ -112,10 +115,15 @@ router.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
+// router.get("/google/callback", passport.authenticate("google"), (req, res) => {
+//   res.send(req.user);
+//   res.send("you reahced callback URI");
+// });
+
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: `http://localHost:3000/profile`,
+    successRedirect: "/users/login/success",
     failureRedirect: "/users/login/failed",
   })
 );
