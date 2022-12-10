@@ -2,6 +2,7 @@ import { Router } from "express";
 import Product from "../models/Product.model.js";
 import asyncHandler from "express-async-handler";
 import Category from "../models/Category.model.js";
+import { isLoggedIn, isAdmin } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -30,6 +31,8 @@ router.get(
 // ADD NEW PRODUCT
 router.post(
   "/",
+  isLoggedIn,
+  isAdmin,
   asyncHandler(async (req, res) => {
     // SAVE PRODUCT W/O CATEGORY
     console.log("REQ.BODY: ", req.body);
@@ -65,6 +68,8 @@ router.post(
 // DELETE PRODUCT
 router.delete(
   "/:slug",
+  isLoggedIn,
+  isAdmin,
   asyncHandler(async (req, res, next) => {
 
     // DELETE PRODUCT
@@ -87,7 +92,10 @@ router.delete(
 //EDIT PRODUCT
 router.put(
   "/:slug",
+  isLoggedIn,
+  isAdmin,
   asyncHandler(async (req, res, next) => {
+
     //REMOVE PRODUCT FROM EARLIER CATEGORY
     const removeFromCategory = await Category.findOneAndUpdate(
       { products: req.body._id },
@@ -114,6 +122,7 @@ router.put(
     console.log(productToEdit)
     const saveToCategory = await Category.findOneAndUpdate(
       { _id: req.body.category },
+
       {
         $push: { products: productToEdit._id },
       },

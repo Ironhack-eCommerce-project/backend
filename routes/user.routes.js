@@ -34,7 +34,8 @@ router.post(
     const matchPassword = await bcrypt.compare(password, user.password);
     if (user && matchPassword) {
       const { _id, name, email, isAdmin, createdAt } = user;
-      res.json({ user });
+      console.log(user);
+      res.json(user).redirect(process.env.CLIENT_ORIGIN);
       return;
     }
     res.status(401).json({ message: "Invalid email or password" });
@@ -92,7 +93,6 @@ router.post(
 
 // GOOGLE PASSPORT OAUTH2
 router.get("/login/success", (req, res) => {
-  // console.log(req.user);
   if (req.user) {
     res.status(200).json({
       message: "Successufully Logged In",
@@ -101,11 +101,6 @@ router.get("/login/success", (req, res) => {
   } else {
     res.status(403).json({ message: "Not authorized" });
   }
-});
-
-router.get("/good", (req, res) => {
-  res.send(`Welcome ${req.user.displayName}`);
-  console.log(req.user);
 });
 
 router.get("/login/failed", (req, res) => {
