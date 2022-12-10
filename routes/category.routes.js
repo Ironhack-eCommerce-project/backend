@@ -1,6 +1,7 @@
 import { response, Router } from "express";
 import Category from "../models/Category.model.js";
 import asyncHandler from "express-async-handler";
+import { isLoggedIn, isAdmin } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -26,9 +27,11 @@ router.get(
   })
 ); */
 
-// ADD NEW PRODUCT
+// ADD NEW CATEGORY
 router.post(
   "/",
+  isLoggedIn,
+  isAdmin,
   asyncHandler(async (req, res) => {
     console.log("REQ.BODY: ", req.body);
     const newCategory = await Category.create({

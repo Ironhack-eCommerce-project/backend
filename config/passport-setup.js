@@ -7,12 +7,14 @@ import User from "../models/User.model.js";
 
 dotenv.config();
 
-passport.serializeUser(function (user, done) {
-  done(null, user);
+passport.serializeUser((user, done) => {
+  done(null, user._id);
 });
 
-passport.deserializeUser(function (user, done) {
-  done(null, user);
+passport.deserializeUser((_id, done) => {
+  User.findById(_id).then((user) => {
+    done(null, user);
+  });
 });
 
 passport.use(
@@ -23,22 +25,30 @@ passport.use(
       //   "785584103709-fb79lranm13k07h2jr4059vtm818r4t6.apps.googleusercontent.com",
       clientSecret: process.env.CLIENT_SECRET,
       callbackURL: `http://localhost:5000/users/google/callback`,
-      scope: ["profile", "email"],
+      // scope: ["profile", "email"],
     },
     function (accessToken, refreshToken, profile, done) {
       // return done(null, profile);
-      // console.log(profile);
-
-      //Creates new user on DB but still have to check if user exists in DB
-      new User({
-        name: profile._json.name,
-        email: profile._json.email,
-        password: accessToken,
-      })
-        .save()
-        .then((newUser) => {
-          console.log("new user: ", newUser);
-        });
+      const email = profile._json.email;
+      console.log(email);
+      // Check if user exists in DB
+      User.findOne({ email }).then((foundUser) => {
+        if (foundUser) {
+          console.log("user is: ", foundUser);
+          done(null, foundUser);
+        } else {
+          new User({
+            name: profile._json.name,
+            email: profile._json.email,
+            password: accessToken,
+          })
+            .save()
+            .then((newUser) => {
+              console.log("new user created: ", newUser);
+              done(null, newUser);
+            });
+        }
+      });
     }
   )
 );
