@@ -1,11 +1,13 @@
-import { response, Router } from "express";
+import { Router } from "express";
 import Category from "../models/Category.model.js";
 import asyncHandler from "express-async-handler";
+import Product from "../models/Product.model.js";
+import mongoose from "mongoose";
 import { isLoggedIn, isAdmin } from "../middleware/auth.js";
 
 const router = Router();
 
-// LIST PRODUCTS
+// LIST CATEGORIES
 router.get(
   "/",
   asyncHandler(async (req, res) => {
@@ -43,35 +45,22 @@ router.post(
   })
 );
 
-// DELETE PRODUCT
-/* router.delete(
+// EDIT CATEGORY
+router.put(
   "/:slug",
   asyncHandler(async (req, res, next) => {
-    const productToDelete = await Product.findOneAndDelete({
-      slug: req.params.slug,
-    });
-    res.send("Product deleted");
-  })
-); */
-
-//EDIT PRODUCT
-/* router.put(
-  "/:slug",
-  asyncHandler(async (req, res, next) => {
-    console.log("REQPARA", req.params);
-    const productToEdit = await Product.findOneAndUpdate(
+    // SAVE CHANGES IN CATEGORY
+    console.log(req.body);
+    const categoryToEdit = await Category.findOneAndUpdate(
       { slug: req.params.slug },
       {
         name: req.body.name,
         slug: req.body.slug,
-        image: req.body.image,
-        category: req.body.category,
-        description: req.body.description,
-        price: req.body.price,
       }
     );
-    res.send("Edited successfully")
+
+    res.send("Edited successfully");
   })
-); */
+);
 
 export default router;

@@ -4,7 +4,7 @@ const categorySchema = new Schema(
   {
     name: { type: String, required: true, unique: true },
     slug: { type: String, required: true, unique: true },
-    products: [{ type: Schema.Types.ObjectId, ref: "product" }],
+    products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   },
   {
     timestamps: true,
