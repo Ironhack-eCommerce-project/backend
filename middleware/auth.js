@@ -1,9 +1,18 @@
 export const isLoggedIn = (req, res, next) => {
-  // req.user ? next() : res.redirect(process.env.CLIENT_ORIGIN);
-  if (!req.user) {
-    res.status(401).json({ message: "Not authorized" });
-    res.redirect("/login");
-  } else {
+  if (req.user) {
     next();
+  } else {
+    res.status(401).json({ message: "Please login first" }).redirect("/login");
+  }
+};
+
+export const isAdmin = (req, res, next) => {
+  if (req.user.isAdmin) {
+    next();
+  } else {
+    res
+      .status(401)
+      .json({ message: "You don't have permission" })
+      .redirect("/");
   }
 };
