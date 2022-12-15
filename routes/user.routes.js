@@ -13,7 +13,6 @@ const router = Router();
 /// USER LOGIN
 router.post(
   "/login",
-  isLoggedIn,
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     // console.log(req.body);
@@ -45,7 +44,6 @@ router.post(
 // USER SIGNUP
 router.post(
   "/signup",
-  isLoggedIn,
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
