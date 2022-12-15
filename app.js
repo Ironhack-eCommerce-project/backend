@@ -4,6 +4,8 @@ import morgan from "morgan";
 import cors from "cors";
 import passport from "passport";
 import session from "express-session";
+// const MongoDBSession = require("connect-mongodb-session")(session);
+import { default as connectMongoDBSession } from "connect-mongodb-session";
 import connectDatabase from "./db/mongoDb.js";
 import "./config/passport-setup.js";
 import userRouter from "./routes/user.routes.js";
@@ -14,6 +16,14 @@ import productRouter from "./routes/product.routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
+
+const MongoDBStore = connectMongoDBSession(session);
+
+const store = new MongoDBStore({
+  uri: process.env.MONGODB_URI,
+  collection: "sessions",
+});
+
 const app = express();
 
 dotenv.config();
@@ -31,8 +41,9 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 },
+    saveUninitialized: false,
+    store: store,
+    cookie: { maxAge: 1000 * 60 * 60 },
   })
 );
 

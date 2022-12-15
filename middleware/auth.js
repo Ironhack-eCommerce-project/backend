@@ -1,5 +1,6 @@
 export const isLoggedIn = (req, res, next) => {
-  if (req.user) {
+  console.log(req.user);
+  if (!req.user) {
     next();
   } else {
     res.status(401).json({ message: "Please login first" }).redirect("/login");
