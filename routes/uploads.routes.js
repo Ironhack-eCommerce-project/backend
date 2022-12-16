@@ -5,17 +5,12 @@ import asyncHandler from "express-async-handler";
 import { v2 as cloudinary } from "cloudinary";
 import { isLoggedIn, isAdmin } from "../middleware/auth.js";
 
-dotenv.config();
 const router = Router();
 
 cloudinary.config({
-  cloud_name: "dq3uidf5r",
-  app_key: "374469147562416",
-  api_secret: "e45BygXLKPPsOaOrrsZr",
-
-  // cloud_name: process.env.CLOUD_NAME,
-  // app_key: process.env.CLOUD_API_KEY,
-  // api_secret: process.env.CLOUD_API_SECRET,
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
 });
 
 router.post(
@@ -23,7 +18,6 @@ router.post(
   // isLoggedIn,
   // isAdmin,
   (req, res) => {
-    console.log(req.files);
     try {
       if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send("No files were uploaded.");
@@ -45,16 +39,17 @@ router.post(
       cloudinary.uploader.upload(
         file.tempFilePath,
         { folder: "eCommerce" },
-        (err, image) => {
+        (err, result) => {
+          res.json({
+            public_id: result.public_id,
+            secure_url: result.secure_url,
+          });
           console.log();
-          console.log("** File Upload");
-          res.json(image);
+          console.log("**** File successfully uploaded!! ***");
         }
       );
-
-      res.json("TEST UPLOAD");
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(500).json(err);
     }
   }
 );
