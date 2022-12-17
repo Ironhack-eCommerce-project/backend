@@ -23,6 +23,7 @@ const userSchema = new Schema(
       required: true,
       default: false,
     },
+    productsInCart: [{ type: Schema.Types.ObjectId, ref: "Product" }],
   },
   {
     timestamps: true,

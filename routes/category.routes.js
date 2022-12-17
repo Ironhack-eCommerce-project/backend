@@ -16,19 +16,6 @@ router.get(
   })
 );
 
-// GET PRODUCT BY SLUG
-/* router.get(
-  "/:slug",
-  asyncHandler(async (req, res) => {
-    const product = await Product.findOne({ slug: req.params.slug });
-    if (product) {
-      res.json(product);
-    } else {
-      res.status(404).send({ message: "Product Not Found" });
-    }
-  })
-); */
-
 // ADD NEW CATEGORY
 router.post(
   "/",
