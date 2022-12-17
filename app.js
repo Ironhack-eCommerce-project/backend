@@ -13,6 +13,7 @@ import profileRouter from "./routes/profile.routes.js";
 import seedRouter from "./routes/seed.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import productRouter from "./routes/product.routes.js";
+import cartRouter from "./routes/cart.routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
@@ -59,6 +60,7 @@ app.use("/products", productRouter);
 app.use("/categories", categoryRouter);
 app.use("/users", userRouter);
 app.use("/profile", profileRouter);
+app.use("/cart", cartRouter);
 
 app.use(notFound);
 app.use(errorHandler);
