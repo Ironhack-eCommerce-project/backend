@@ -1,4 +1,4 @@
-import { response, Router } from "express";
+import { Router } from "express";
 import Category from "../models/Category.model.js";
 import asyncHandler from "express-async-handler";
 import { isLoggedIn, isAdmin } from "../middleware/auth.js";
