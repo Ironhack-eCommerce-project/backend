@@ -2,8 +2,6 @@ import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs-extra";
 import { Router } from "express";
-import Category from "../models/Category.model.js";
-import asyncHandler from "express-async-handler";
 import { isLoggedIn, isAdmin } from "../middleware/auth.js";
 
 const router = Router();
@@ -20,9 +18,10 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
+// Upload Image to Cloudinary
 router.post(
-  "/",
-  // isLoggedIn,
+  "/upload",
+  isLoggedIn,
   // isAdmin,
   (req, res) => {
     try {
@@ -46,19 +45,35 @@ router.post(
         return res.status(400).json({ message: "Incorrect file format." });
       }
 
-      cloudinary.uploader.upload(file.tempFilePath, { folder: "eCommerce" }, (err, result) => {
-        if (err) throw err;
+      cloudinary.uploader.upload(file.tempFilePath, { folder: "eCommerce" }, (error, result) => {
+        if (error) throw error;
 
         removeTmpFile(file.tempFilePath);
 
         res.json({ public_id: result.public_id, secure_url: result.secure_url });
         console.log();
-        console.log("**** File successfully uploaded!! ***");
+        console.log("**** Image successfully uploaded!! ***");
       });
-    } catch (err) {
-      res.status(500).json(err);
+    } catch (error) {
+      return res.status(500).json({ message: err.message });
     }
   }
 );
+
+// Delete Image from Cloudinary
+router.post("/delete", isAdmin, (req, res) => {
+  try {
+    const { public_id } = req.body;
+
+    if (!public_id) return res.status(400).json({ message: "No image selected" });
+
+    cloudinary.uploader.destroy(public_id, async (error, result) => {
+      if (error) throw error;
+      res.json({ message: "*** Deleted Image ***" });
+    });
+  } catch (error) {
+    return res.status(500).json({ message: err.message });
+  }
+});
 
 export default router;

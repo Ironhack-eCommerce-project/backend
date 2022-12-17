@@ -15,7 +15,6 @@ router.post(
   "/login",
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    // console.log(req.body);
 
     if (email === "" || password === "") {
       res.status(400).json({ message: "Provide email and password." });
@@ -33,8 +32,8 @@ router.post(
     const matchPassword = await bcrypt.compare(password, user.password);
     if (user && matchPassword) {
       const { _id, name, email, isAdmin, createdAt } = user;
-      console.log(user);
-      res.json(user).redirect(process.env.CLIENT_ORIGIN);
+      res.json(user);
+      console.log({ user: user });
       return;
     }
     res.status(401).json({ message: "Invalid email or password" });
@@ -105,10 +104,7 @@ router.get("/login/failed", (req, res) => {
   res.status(401).json({ message: "Login failed" });
 });
 
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.get(
   "/google/callback",
@@ -119,9 +115,11 @@ router.get(
 );
 
 //USER LOGOUT
-router.get("/logout", (req, res) => {
-  req.session = null;
-  res.redirect(process.env.CLIENT_ORIGIN);
+router.post("/logout", (req, res) => {
+  req.session.destroy((error) => {
+    if (error) return next(error);
+    res.json({ message: "Successfully logged out!" });
+  });
 });
 
 export default router;

@@ -11,7 +11,7 @@ import productRouter from "./routes/product.routes.js";
 import userRouter from "./routes/user.routes.js";
 import seedRouter from "./routes/seed.routes.js";
 import categoryRouter from "./routes/category.routes.js";
-import uploadsRouter from "./routes/uploads.routes.js";
+import imageRouter from "./routes/image.routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
@@ -53,7 +53,7 @@ app.use("/api/seed", seedRouter);
 app.use("/products", productRouter);
 app.use("/users", userRouter);
 app.use("/categories", categoryRouter);
-app.use("/upload", uploadsRouter);
+app.use("/images", imageRouter);
 
 app.use(notFound);
 app.use(errorHandler);
