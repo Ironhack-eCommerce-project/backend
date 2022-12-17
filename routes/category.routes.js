@@ -32,8 +32,8 @@ router.get(
 // ADD NEW CATEGORY
 router.post(
   "/",
-  isLoggedIn,
-  isAdmin,
+  /* isLoggedIn,
+  isAdmin, */
   asyncHandler(async (req, res) => {
     console.log("REQ.BODY: ", req.body);
     const newCategory = await Category.create({
