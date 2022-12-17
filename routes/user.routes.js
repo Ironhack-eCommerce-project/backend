@@ -13,10 +13,8 @@ const router = Router();
 /// USER LOGIN
 router.post(
   "/login",
-  isLoggedIn,
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    // console.log(req.body);
 
     if (email === "" || password === "") {
       res.status(400).json({ message: "Provide email and password." });
@@ -34,8 +32,8 @@ router.post(
     const matchPassword = await bcrypt.compare(password, user.password);
     if (user && matchPassword) {
       const { _id, name, email, isAdmin, createdAt } = user;
-      console.log(user);
-      res.json(user).redirect(process.env.CLIENT_ORIGIN);
+      req.session.currentUser = user;
+      res.json(user);
       return;
     }
     res.status(401).json({ message: "Invalid email or password" });
@@ -45,7 +43,6 @@ router.post(
 // USER SIGNUP
 router.post(
   "/signup",
-  isLoggedIn,
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
@@ -83,7 +80,8 @@ router.post(
 
     if (createdUser) {
       const { _id, name, email, isAdmin } = createdUser;
-      const user = { _id, email };
+      const user = { _id, email, isAdmin };
+      req.session.currentUser = user;
       res.status(200).json({ user: user });
     } else {
       res.status(400).json("Invalid User Data");
@@ -94,9 +92,8 @@ router.post(
 // GOOGLE PASSPORT OAUTH2
 router.get("/login/success", (req, res) => {
   if (req.user) {
-    res.status(200).json({
+    res.json({ user: req.user }).status(200).json({
       message: "Successufully Logged In",
-      user: req.user,
     });
   } else {
     res.status(403).json({ message: "Not authorized" });
@@ -107,23 +104,22 @@ router.get("/login/failed", (req, res) => {
   res.status(401).json({ message: "Login failed" });
 });
 
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: `http://localHost:3000/profile`,
+    successRedirect: "/users/login/success",
     failureRedirect: "/users/login/failed",
   })
 );
 
 //USER LOGOUT
-router.get("/logout", (req, res) => {
-  req.session = null;
-  res.redirect(process.env.CLIENT_ORIGIN);
+router.post("/logout", (req, res) => {
+  req.session.destroy((error) => {
+    if (error) return next(error);
+    res.json({ message: "Successfully logged out!" });
+  });
 });
 
 export default router;
