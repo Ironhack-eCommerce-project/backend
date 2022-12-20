@@ -95,6 +95,9 @@ router.get("/login/success", (req, res) => {
     res.json({ user: req.user }).status(200).json({
       message: "Successufully Logged In",
     });
+    res.json({ user: req.user }).status(200).json({
+      message: "Successufully Logged In",
+    });
   } else {
     res.status(403).json({ message: "Not authorized" });
   }
@@ -104,7 +107,15 @@ router.get("/login/failed", (req, res) => {
   res.status(401).json({ message: "Login failed" });
 });
 
-router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+// router.get("/google/callback", passport.authenticate("google"), (req, res) => {
+//   res.send(req.user);
+//   res.send("you reahced callback URI");
+// });
 
 router.get(
   "/google/callback",
@@ -115,6 +126,11 @@ router.get(
 );
 
 //USER LOGOUT
+router.post("/logout", (req, res) => {
+  req.session.destroy((error) => {
+    if (error) return next(error);
+    res.json({ message: "Successfully logged out!" });
+  });
 router.post("/logout", (req, res) => {
   req.session.destroy((error) => {
     if (error) return next(error);
