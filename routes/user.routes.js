@@ -17,7 +17,7 @@ router.post(
     const { email, password } = req.body;
 
     if (email === "" || password === "") {
-      res.status(400).json({ message: "Provide email and password." });
+      res.status(400).json({ message: "Please enter email and password." });
       return;
     }
 
@@ -47,13 +47,13 @@ router.post(
     const { email, password } = req.body;
 
     if (email === "" || password === "") {
-      res.status(400).json({ message: "Provide email, password and name" });
+      res.status(400).json({ message: "Please enter email, password" });
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     if (!emailRegex.test(email)) {
-      res.status(400).json({ message: "Provide a valid email address." });
+      res.status(400).json({ message: "Please enter a valid email address." });
       return;
     }
 
