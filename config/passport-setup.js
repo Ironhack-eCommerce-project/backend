@@ -34,7 +34,7 @@ passport.use(
         const user = await new User({
           name: profile.displayName,
           email: profile._json.email,
-          password: accessToken,
+          // password: accessToken,
         }).save();
         console.log("new user created: ", user);
         done(null, user);

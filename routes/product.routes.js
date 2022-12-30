@@ -23,7 +23,7 @@ router.get(
     if (product) {
       res.json(product);
     } else {
-      res.status(404).send({ message: "Product Not Found" });
+      res.status(404).json({ message: "Product Not Found" });
     }
   })
 );
@@ -31,8 +31,7 @@ router.get(
 // ADD NEW PRODUCT
 router.post(
   "/",
-  isLoggedIn,
-  isAdmin,
+  // isLoggedIn,
   asyncHandler(async (req, res) => {
     console.log("REQ.BODY: ", req.body);
     const newProduct = await Product.create({
@@ -51,20 +50,20 @@ router.post(
       },
       { new: true }
     );
-    res.send("Data sent");
+    res.json("Data sent");
   })
 );
 
 // DELETE PRODUCT
 router.delete(
   "/:slug",
-  isLoggedIn,
-  isAdmin,
+  // isLoggedIn,
+  // isAdmin,
   asyncHandler(async (req, res, next) => {
-    const productToDelete = await Product.findOneAndDelete({
+    await Product.findOneAndDelete({
       slug: req.params.slug,
     });
-    res.send("Product deleted");
+    res.json("Product deleted");
   })
 );
 
