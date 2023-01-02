@@ -13,6 +13,7 @@ import seedRouter from "./routes/seed.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import imageRouter from "./routes/image.routes.js";
 import productRouter from "./routes/product.routes.js";
+import cartRouter from "./routes/cart.routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
 import ConnectMongoDBSession from "connect-mongodb-session";
 
@@ -66,6 +67,7 @@ app.use("/products", productRouter);
 app.use("/categories", categoryRouter);
 app.use("/users", userRouter);
 app.use("/profile", profileRouter);
+app.use("/cart", cartRouter);
 app.use("/images", imageRouter);
 
 app.use(notFound);

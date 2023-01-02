@@ -1,11 +1,13 @@
 import { Router } from "express";
 import Category from "../models/Category.model.js";
 import asyncHandler from "express-async-handler";
+import Product from "../models/Product.model.js";
+import mongoose from "mongoose";
 import { isLoggedIn, isAdmin } from "../middleware/auth.js";
 
 const router = Router();
 
-// LIST CATEGOIRIES
+// LIST CATEGORIES
 router.get(
   "/",
   asyncHandler(async (req, res) => {
@@ -30,7 +32,6 @@ router.post(
   })
 );
 
-// DELETE CATEGORY
 router.delete(
   "/:slug",
   asyncHandler(async (req, res, next) => {
@@ -39,10 +40,12 @@ router.delete(
   })
 );
 
-//EDIT CATEGORY
+// EDIT CATEGORY
 router.put(
   "/:slug",
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req, res, next) => {
+    // SAVE CHANGES IN CATEGORY
+    console.log(req.body);
     const categoryToEdit = await Category.findOneAndUpdate(
       { slug: req.params.slug },
       {
