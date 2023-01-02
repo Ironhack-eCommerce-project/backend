@@ -11,15 +11,15 @@ import userRouter from "./routes/user.routes.js";
 import profileRouter from "./routes/profile.routes.js";
 import seedRouter from "./routes/seed.routes.js";
 import categoryRouter from "./routes/category.routes.js";
-import uploadsRouter from "./routes/uploads.routes.js";
 import imageRouter from "./routes/image.routes.js";
 import productRouter from "./routes/product.routes.js";
 import cartRouter from "./routes/cart.routes.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
+import ConnectMongoDBSession from "connect-mongodb-session";
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
 
-const MongoDBStore = connectMongoDBSession(session);
+const MongoDBStore = ConnectMongoDBSession(session);
 
 const store = new MongoDBStore({
   uri: process.env.MONGODB_URI,
@@ -51,6 +51,7 @@ app.use(
     saveUninitialized: false,
     store: store,
     cookie: { maxAge: 1000 * 60 * 60 },
+    path: "/",
   })
 );
 
@@ -64,7 +65,6 @@ app.get("/", (req, res) => {
 app.use("/api/seed", seedRouter);
 app.use("/products", productRouter);
 app.use("/categories", categoryRouter);
-app.use("/upload", uploadsRouter);
 app.use("/users", userRouter);
 app.use("/profile", profileRouter);
 app.use("/cart", cartRouter);

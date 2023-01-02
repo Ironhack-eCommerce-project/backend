@@ -19,8 +19,8 @@ router.get(
 // ADD NEW CATEGORY
 router.post(
   "/",
-  /* isLoggedIn,
-  isAdmin, */
+  // isLoggedIn,
+  // isAdmin,
   asyncHandler(async (req, res) => {
     console.log("REQ.BODY: ", req.body);
     const newCategory = await Category.create({
@@ -28,7 +28,15 @@ router.post(
       slug: req.body.slug,
       products: req.body.products,
     });
-    res.send("Data sent");
+    res.json(newCategory);
+  })
+);
+
+router.delete(
+  "/:slug",
+  asyncHandler(async (req, res, next) => {
+    await Category.findByIdAndDelete(req.params.id);
+    res.json("Category deleted");
   })
 );
 
@@ -45,8 +53,7 @@ router.put(
         slug: req.body.slug,
       }
     );
-
-    res.send("Edited successfully");
+    res.json("Category edited successfully");
   })
 );
 

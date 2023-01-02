@@ -33,6 +33,7 @@ router.post(
     if (user && matchPassword) {
       const { _id, name, email, isAdmin, createdAt } = user;
       req.session.currentUser = user;
+      console.log("Session========>", req.session);
       res.json(user);
       return;
     }
@@ -92,12 +93,15 @@ router.post(
 // GOOGLE PASSPORT OAUTH2
 router.get("/login/success", (req, res) => {
   if (req.user) {
-    res.json({ user: req.user }).status(200).json({
-      message: "Successufully Logged In",
-    });
-    res.json({ user: req.user }).status(200).json({
-      message: "Successufully Logged In",
-    });
+    console.log(req.user);
+    res
+      .status(200)
+      .json({
+        error: false,
+        message: "Successufully Logged In",
+        user: req.user,
+      })
+      .json({});
   } else {
     res.status(403).json({ message: "Not authorized" });
   }
@@ -112,15 +116,16 @@ router.get("/google", passport.authenticate("google", { scope: ["profile", "emai
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/users/login/success",
+    successRedirect: process.env.CLIENT_ORIGIN,
     failureRedirect: "/users/login/failed",
   })
 );
 
 //USER LOGOUT
 router.post("/logout", (req, res) => {
-  req.session.destroy((error) => {
-    if (error) return next(error);
+  req.session.destroy(() => {
+    // if (error) next(error);
+    res.clearCookie("connect.sid", { path: "/" });
     res.json({ message: "Successfully logged out!" });
   });
 });

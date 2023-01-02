@@ -21,7 +21,7 @@ cloudinary.config({
 // Upload Image to Cloudinary
 router.post(
   "/upload",
-  isLoggedIn,
+  // isLoggedIn,
   // isAdmin,
   (req, res) => {
     try {
@@ -50,7 +50,8 @@ router.post(
 
         removeTmpFile(file.tempFilePath);
 
-        res.json({ public_id: result.public_id, secure_url: result.secure_url });
+        res.json(result.secure_url);
+        // res.json({ public_id: result.public_id, secure_url: result.secure_url });
         console.log();
         console.log("**** Image successfully uploaded!! ***");
       });

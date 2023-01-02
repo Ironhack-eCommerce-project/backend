@@ -23,7 +23,7 @@ router.get(
     if (product) {
       res.json(product);
     } else {
-      res.status(404).send({ message: "Product Not Found" });
+      res.status(404).json({ message: "Product Not Found" });
     }
   })
 );
@@ -31,8 +31,8 @@ router.get(
 // ADD NEW PRODUCT
 router.post(
   "/",
-  /* isLoggedIn,
-  isAdmin, */
+  // isLoggedIn,
+
   asyncHandler(async (req, res) => {
     // SAVE PRODUCT W/O CATEGORY
     console.log("REQ.BODY: ", req.body);
@@ -52,6 +52,7 @@ router.post(
       },
       { new: true }
     );
+    res.json("Data sent");
 
     // ADD CATEGORY ID TO PRODUCT
     console.log("FOUND CATEGORY", foundCategory);
@@ -72,7 +73,6 @@ router.delete(
   isAdmin, */
   asyncHandler(async (req, res, next) => {
 
-    // DELETE PRODUCT
     const productToDelete = await Product.findOneAndDelete({
       slug: req.params.slug,
     });
