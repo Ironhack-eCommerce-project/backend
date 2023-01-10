@@ -11,9 +11,10 @@ const router = Router();
 router.post(
   "/",
   asyncHandler(async (req, res) => {
+    console.log("REQ BOD: ", req.body.addedProduct);
     const foundUser = await User.findByIdAndUpdate(
       req.session.currentUser._id,
-      { $push: { productsInCart: req.body }}
+      { $push: { productsInCart: req.body.addedProduct } }
     );
     console.log(foundUser);
     res.send("Product added to cart");
