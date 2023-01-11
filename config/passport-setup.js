@@ -6,11 +6,11 @@ import User from "../models/User.model.js";
 dotenv.config();
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user._id);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id).then((user) => {
+passport.deserializeUser((_id, done) => {
+  User.findById(_id).then((user) => {
     done(null, user);
   });
 });
@@ -20,7 +20,8 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: `http://localhost:5000/users/google/callback`,
+      callbackURL: `/users/google/callback`,
+      scope: ["profile", "email"],
     },
     async (accessToken, refreshToken, profile, done) => {
       const email = profile._json.email;

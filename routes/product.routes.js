@@ -10,7 +10,7 @@ const router = Router();
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const products = await Product.find().populate("category", "name")
+    const products = await Product.find().populate("category", "name");
     res.json(products);
   })
 );
@@ -35,7 +35,7 @@ router.post(
 
   asyncHandler(async (req, res) => {
     // SAVE PRODUCT W/O CATEGORY
-    console.log("REQ.BODY: ", req.body);
+    // console.log("REQ.BODY: ", req.body);
     const newProduct = await Product.create({
       name: req.body.name,
       slug: req.body.slug,
@@ -72,19 +72,15 @@ router.delete(
   /* isLoggedIn,
   isAdmin, */
   asyncHandler(async (req, res, next) => {
-
     const productToDelete = await Product.findOneAndDelete({
       slug: req.params.slug,
     });
     console.log("PTD", productToDelete);
 
     // REMOVE PRODUCT FROM CATEGORY
-    const foundCategory = await Category.findByIdAndUpdate(
-      productToDelete.category,
-      {
-        $pull: { products: productToDelete._id },
-      }
-    )
+    const foundCategory = await Category.findByIdAndUpdate(productToDelete.category, {
+      $pull: { products: productToDelete._id },
+    });
     res.send("Product deleted");
   })
 );
@@ -95,7 +91,6 @@ router.put(
   /* isLoggedIn,
   isAdmin, */
   asyncHandler(async (req, res, next) => {
-
     //REMOVE PRODUCT FROM EARLIER CATEGORY
     const removeFromCategory = await Category.findOneAndUpdate(
       { products: req.body._id },
@@ -119,7 +114,7 @@ router.put(
     );
 
     //SAVE TO NEW CATEGORY
-    console.log(productToEdit)
+    console.log(productToEdit);
     const saveToCategory = await Category.findOneAndUpdate(
       { _id: req.body.category },
 
@@ -128,7 +123,7 @@ router.put(
       },
       { new: true }
     );
-    console.log(saveToCategory)
+    console.log(saveToCategory);
     res.send("Edited successfully");
   })
 );
