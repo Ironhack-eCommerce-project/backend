@@ -100,8 +100,9 @@ router.get("/login/success", (req, res) => {
         error: false,
         message: "Successufully Logged In",
         user: req.user,
+        cookies: req.cookies,
       })
-      .json({});
+      .redirect("/profile");
   } else {
     res.status(403).json({ message: "Not authorized" });
   }
@@ -116,6 +117,7 @@ router.get("/google", passport.authenticate("google", { scope: ["profile", "emai
 router.get(
   "/google/callback",
   passport.authenticate("google", {
+    // successRedirect: "/users/login/success",
     successRedirect: process.env.CLIENT_ORIGIN,
     failureRedirect: "/users/login/failed",
   })
@@ -123,6 +125,7 @@ router.get(
 
 //USER LOGOUT
 router.post("/logout", (req, res) => {
+  // req.logout();
   req.session.destroy(() => {
     // if (error) next(error);
     res.clearCookie("connect.sid", { path: "/" });

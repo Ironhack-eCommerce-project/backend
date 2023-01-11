@@ -51,7 +51,7 @@ router.post("/create-checkout-session", async (req, res) => {
     cancel_url: `${process.env.CLIENT_ORIGIN}/cart`,
   });
 
-  res.send(session.url);
+  res.json(session.url);
 });
 
 export default router;

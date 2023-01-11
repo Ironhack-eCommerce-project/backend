@@ -19,47 +19,41 @@ cloudinary.config({
 });
 
 // Upload Image to Cloudinary
-router.post(
-  "/upload",
-  // isLoggedIn,
-  // isAdmin,
-  (req, res) => {
-    try {
-      if (!req.files || Object.keys(req.files).length === 0) {
-        return res.status(400).send("No files were uploaded.");
-      }
-
-      const file = req.files.file;
-      if (file.size > 1920 * 1920) {
-        removeTmpFile(file.tempFilePath);
-        return res.status(400).json({ message: "Image size too large" });
-      }
-
-      if (
-        file.mimetype !== "image/jpeg" &&
-        file.mimetype !== "image/png" &&
-        file.mimetype !== "image/webp"
-      ) {
-        removeTmpFile(file.tempFilePath);
-
-        return res.status(400).json({ message: "Incorrect file format." });
-      }
-
-      cloudinary.uploader.upload(file.tempFilePath, { folder: "eCommerce" }, (error, result) => {
-        if (error) throw error;
-
-        removeTmpFile(file.tempFilePath);
-
-        res.json(result.secure_url);
-        // res.json({ public_id: result.public_id, secure_url: result.secure_url });
-        console.log();
-        console.log("**** Image successfully uploaded!! ***");
-      });
-    } catch (error) {
-      return res.status(500).json({ message: err.message });
+router.post("/upload", (req, res) => {
+  try {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).send("No files were uploaded.");
     }
+
+    const file = req.files.file;
+    if (file.size > 1920 * 1920) {
+      removeTmpFile(file.tempFilePath);
+      return res.status(400).json({ message: "Image size too large" });
+    }
+
+    if (
+      file.mimetype !== "image/jpeg" &&
+      file.mimetype !== "image/png" &&
+      file.mimetype !== "image/webp"
+    ) {
+      removeTmpFile(file.tempFilePath);
+
+      return res.status(400).json({ message: "Incorrect file format." });
+    }
+
+    cloudinary.uploader.upload(file.tempFilePath, { folder: "eCommerce" }, (error, result) => {
+      if (error) throw error;
+
+      removeTmpFile(file.tempFilePath);
+
+      res.json(result.secure_url);
+      // res.json({ public_id: result.public_id, secure_url: result.secure_url });
+      console.log("**** Image successfully uploaded!! ***");
+    });
+  } catch (error) {
+    return res.status(500).json({ message: err.message });
   }
-);
+});
 
 // Delete Image from Cloudinary
 router.post("/delete", isAdmin, (req, res) => {
