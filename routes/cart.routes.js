@@ -11,12 +11,10 @@ const router = Router();
 router.post(
   "/",
   asyncHandler(async (req, res) => {
-    console.log("REQ BOD: ", req.body.addedProduct);
     const foundUser = await User.findByIdAndUpdate(
       req.session.currentUser._id,
       { $push: { productsInCart: req.body.addedProduct } }
     );
-    console.log(foundUser);
     res.send("Product added to cart");
   })
 );
@@ -28,9 +26,20 @@ router.get(
     const foundUser = await User.findById(req.session.currentUser._id).populate(
       "productsInCart.product"
     );
-    console.log(foundUser.productsInCart);
     const productsInCart = foundUser.productsInCart;
     res.json(productsInCart);
+  })
+);
+
+//REMOVE PRODUCT FROM CART
+router.post(
+  "/:id",
+  asyncHandler(async (req, res) => {   
+    const foundUser = await User.findByIdAndUpdate(
+      req.session.currentUser._id,
+      { $pull: { productsInCart: { _id: req.params.id } } }
+    );
+    res.send("Product added to cart");
   })
 );
 
