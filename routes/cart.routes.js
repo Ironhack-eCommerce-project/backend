@@ -13,7 +13,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const foundUser = await User.findByIdAndUpdate(
       req.session.currentUser._id,
-      { $push: { productsInCart: req.body.addedProduct } }
+      { $push: { productsInCart: { product: req.body.product } } }
     );
     res.send("Product added to cart");
   })
