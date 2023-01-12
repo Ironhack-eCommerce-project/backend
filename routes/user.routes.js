@@ -33,7 +33,7 @@ router.post(
     if (user && matchPassword) {
       const { _id, name, email, isAdmin, createdAt } = user;
       req.session.currentUser = user;
-      console.log("Session========>", req.session);
+      // console.log("Session========>", req.session);
       res.json(user);
       return;
     }
@@ -93,16 +93,12 @@ router.post(
 // GOOGLE PASSPORT OAUTH2
 router.get("/login/success", (req, res) => {
   if (req.user) {
-    console.log(req.user);
-    res
-      .status(200)
-      .json({
-        error: false,
-        message: "Successufully Logged In",
-        user: req.user,
-        cookies: req.cookies,
-      })
-      .redirect("/profile");
+    res.status(200).json({
+      error: false,
+      message: "Successufully Logged In",
+      user: req.user,
+      cookies: req.cookies,
+    });
   } else {
     res.status(403).json({ message: "Not authorized" });
   }
@@ -117,8 +113,8 @@ router.get("/google", passport.authenticate("google", { scope: ["profile", "emai
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    // successRedirect: "/users/login/success",
-    successRedirect: process.env.CLIENT_ORIGIN,
+    successRedirect: "/users/login/success",
+    // successRedirect: process.env.CLIENT_ORIGIN + "/store",
     failureRedirect: "/users/login/failed",
   })
 );
