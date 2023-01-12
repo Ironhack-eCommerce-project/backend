@@ -38,19 +38,10 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: "*",
-    allowedHeaders: "*",
+    origin: CLIENT_ORIGIN,
     credentials: true,
-    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
   })
 );
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.setHeader("Access-Control-Allow-Credentials", "true");
-//   next();
-// });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
