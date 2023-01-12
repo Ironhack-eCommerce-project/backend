@@ -113,8 +113,8 @@ router.get("/google", passport.authenticate("google", { scope: ["profile", "emai
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/users/login/success",
-    // successRedirect: process.env.CLIENT_ORIGIN + "/store",
+    // successRedirect: "/users/login/success",
+    successRedirect: process.env.CLIENT_ORIGIN + "/store",
     failureRedirect: "/users/login/failed",
   })
 );
