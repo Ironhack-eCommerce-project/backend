@@ -38,7 +38,7 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: CLIENT_ORIGIN,
+    origin: "*",
     allowedHeaders: "*",
     credentials: true,
     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
