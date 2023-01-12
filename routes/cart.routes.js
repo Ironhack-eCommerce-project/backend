@@ -26,7 +26,7 @@ router.get(
   "/",
   asyncHandler(async (req, res) => {
     const foundUser = await User.findById(req.session.currentUser._id).populate(
-      "productsInCart"
+      "productsInCart.product"
     );
     console.log(foundUser.productsInCart);
     const productsInCart = foundUser.productsInCart;

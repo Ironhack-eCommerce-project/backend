@@ -23,7 +23,14 @@ const userSchema = new Schema(
       required: true,
       default: false,
     },
-    productsInCart: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+    
+    // adding it as an object, so each product in
+    // the cart gets it's own _id
+    productsInCart: [
+      {
+        product: { type: Schema.Types.ObjectId, ref: "Product" },
+      },
+    ],
   },
   {
     timestamps: true,
