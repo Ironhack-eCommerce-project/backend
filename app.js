@@ -20,6 +20,13 @@ import ConnectMongoDBSession from "connect-mongodb-session";
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
 
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN,
+    credentials: true,
+  })
+);
+
 const MongoDBStore = ConnectMongoDBSession(session);
 
 const store = new MongoDBStore({
@@ -35,13 +42,6 @@ connectDatabase();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan("dev"));
-
-app.use(
-  cors({
-    origin: CLIENT_ORIGIN,
-    credentials: true,
-  })
-);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
