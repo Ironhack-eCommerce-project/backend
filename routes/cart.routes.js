@@ -1,7 +1,5 @@
 import { Router } from "express";
 import asyncHandler from "express-async-handler";
-import { isLoggedIn, isAdmin } from "../middleware/auth.js";
-import Product from "../models/Product.model.js";
 import User from "../models/User.model.js";
 const router = Router();
 // ADD PRODUCTS TO CART
@@ -11,7 +9,7 @@ router.post(
 
     const foundUser = await User.findByIdAndUpdate(
       req.session.currentUser._id,
-      { $push: { productsInCart: req.body.addedProduct } }
+      { $push: { productsInCart: { product: req.body.product } } }
     );
     res.send("Product added to cart");
   })

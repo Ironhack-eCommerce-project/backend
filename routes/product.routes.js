@@ -2,7 +2,6 @@ import { Router } from "express";
 import Product from "../models/Product.model.js";
 import asyncHandler from "express-async-handler";
 import Category from "../models/Category.model.js";
-import { isLoggedIn, isAdmin } from "../middleware/auth.js";
 
 const router = Router();
 

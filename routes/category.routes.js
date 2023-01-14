@@ -1,9 +1,6 @@
 import { Router } from "express";
 import Category from "../models/Category.model.js";
 import asyncHandler from "express-async-handler";
-import Product from "../models/Product.model.js";
-import mongoose from "mongoose";
-import { isLoggedIn, isAdmin } from "../middleware/auth.js";
 
 const router = Router();
 
