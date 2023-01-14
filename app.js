@@ -18,7 +18,10 @@ import stripe from "./config/stripe.js";
 import { errorHandler, notFound } from "./middleware/errors.js";
 import ConnectMongoDBSession from "connect-mongodb-session";
 
+dotenv.config();
+
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
+console.log(CLIENT_ORIGIN);
 
 const MongoDBStore = ConnectMongoDBSession(session);
 
@@ -36,7 +39,6 @@ app.use(
   })
 );
 
-dotenv.config();
 connectDatabase();
 
 app.use(express.json());
