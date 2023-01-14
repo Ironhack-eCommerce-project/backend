@@ -20,13 +20,6 @@ import ConnectMongoDBSession from "connect-mongodb-session";
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
 
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
-
 const MongoDBStore = ConnectMongoDBSession(session);
 
 const store = new MongoDBStore({
@@ -35,6 +28,13 @@ const store = new MongoDBStore({
 });
 
 const app = express();
+
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN,
+    credentials: true,
+  })
+);
 
 dotenv.config();
 connectDatabase();
